@@ -99,10 +99,10 @@ h1 {
 .message-window {
   border: rgb(139, 139, 139) solid 2px;
   background: rgba(47, 47, 47, 0.99);
-  border-radius: 20px;
-  overflow-y: auto;
+  border-radius: 40px;
   min-height: 88%;
-
+  max-height: 88%;
+  overflow-y: auto;
   /* come back here */
 }
 

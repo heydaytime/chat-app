@@ -1,4 +1,3 @@
-const GroupDB = require("../model/groupSchema");
 const Users = require(`${__dirname}/../model/userSchema`);
 
 exports.signup = async (req, res) => {
