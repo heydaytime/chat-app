@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.container {
+  background: white;
+  padding: 100px;
+  border-radius: 50px;
+  border-right: black solid 2px;
+  border-bottom: black solid 5px;
+}
+h1 {
+  padding-bottom: 25px;
+  text-align: center;
+  font-family: monospace;
+  font-size: 50px;
+}
+
+.signin {
+  padding-top: 5px;
+  float: right;
+}
+a {
+  text-decoration: none;
+  font-family: monospace;
+  font-size: large;
+  color: dodgerblue;
+}
