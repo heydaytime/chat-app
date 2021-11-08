@@ -19,7 +19,7 @@ async function registerUser(event) {
 
   if (result.status === "success") {
     alert("User succesfully created!");
-    window.location.href = "https://heyday.dev:8000/login";
+    window.location.href = "https://heyday.dev/login";
   } else {
     alert(JSON.stringify(result.error));
   }

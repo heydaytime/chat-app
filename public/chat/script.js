@@ -1,6 +1,7 @@
 const token = localStorage.getItem("auth-token");
 let username;
 
+// Functions to make html adapt to data
 const createMsgBody = (me, sender, content, creationTime) => {
   const who = me ? "message-me" : "";
   const msgWindow = document.getElementById("msg-win");
@@ -22,12 +23,13 @@ const createOnlineUser = (username) => {
   onlineUsersWindow.innerHTML += userJoinedBody;
 };
 
-const socket = io("https://heyday.dev");
+const autoScroll = () => {
+  const msgWindow = document.getElementById("msg-win");
+  msgWindow.scrollTop = msgWindow.scrollHeight;
+};
 
-socket.on("connect", () => {
-  console.log("my socketid", socket.id);
-  console.log("my userid", token);
-});
+// Socket.io Connection
+const socket = io("https://heyday.dev");
 
 socket.emit("auth-req", token);
 
@@ -51,10 +53,8 @@ socket.on("now-online", (data) => {
 socket.on("recieve-msg", (data) => {
   const who = username === data.username;
 
-  console.log(data.username);
-  console.log(username);
-
   createMsgBody(who, data.username, data.message, data.time);
+  autoScroll();
 });
 
 const msgBar = document.getElementById("msg-field");
