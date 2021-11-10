@@ -2,7 +2,8 @@ const dotenv = require("dotenv");
 dotenv.config({ path: `${__dirname}/config.env` });
 const app = require(`${__dirname}/app`);
 
-const Users = require(`${__dirname}/model/userSchema`);
+const Users = require(`${__dirname}/model/user`);
+const Chat = require(`${__dirname}/model/chat`);
 
 // HTTPS SERVER
 const https = require("https");
@@ -30,35 +31,43 @@ io.on("connection", (socket) => {
     // Setting authToken
     authToken = data;
     Users.findById(authToken).then((user) => {
-      if (user === null) {
+      if (user === null && !user.is_online) {
         socket.emit("auth-res", false);
         socket.disconnect();
         return;
       }
-      if (!user.is_online) {
-        socket.emit("auth-res", false);
-        socket.disconnect();
-      }
+      // Getting Chat
+
+      Chat.find().then((messages) => {
+        const setupData = {
+          username: user.username,
+          messages,
+        };
+        socket.emit("setup-data", setupData);
+      });
+
       // Setting username
       username = user.username;
-      socket.emit("username", username);
       socket.emit("auth-res", true);
       io.emit("now-online", username);
     });
   });
 
-  socket.on("send-msg", (msg) => {
-    const date = new Date();
-    const time = date.toLocaleTimeString("en-US", {
+  socket.on("send-msg", (message) => {
+    const time = new Date().toLocaleTimeString("en-IN", {
       hour: "numeric",
       minute: "numeric",
     });
 
-    io.emit("recieve-msg", {
+    const messageObj = {
       username,
-      message: msg,
+      message,
       time,
-    });
+    };
+
+    io.emit("recieve-msg", messageObj);
+
+    Chat.create(messageObj).then();
   });
 
   socket.on("disconnect", () => {

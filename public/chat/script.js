@@ -29,21 +29,29 @@ const autoScroll = () => {
 };
 
 // Socket.io Connection
-const socket = io("https://heyday.dev");
+const socket = io("/");
 
 socket.emit("auth-req", token);
 
 socket.on("auth-res", (data) => {
   if (!data) {
     alert("Auth-Token invalid, please login first.");
-    window.location.href = "https://heyday.dev/login";
+    window.location.href = "/login";
   } else {
     alert("Welcome To Chat-Room!");
   }
 });
 
-socket.on("username", (data) => {
-  username = data;
+socket.on("setup-data", (data) => {
+  username = data.username;
+  const messages = data.messages;
+
+  for (const iterator of messages) {
+    const { username: sender, message, time } = iterator;
+    createMsgBody(username === sender, sender, message, time);
+  }
+
+  autoScroll();
 });
 
 socket.on("now-online", (data) => {
