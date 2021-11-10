@@ -1,4 +1,4 @@
-const Users = require(`${__dirname}/../model/userSchema`);
+const Users = require(`${__dirname}/../model/user`);
 
 exports.signup = async (req, res) => {
   try {
@@ -10,7 +10,6 @@ exports.signup = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       status: "fail",
-      error,
     });
   }
 };

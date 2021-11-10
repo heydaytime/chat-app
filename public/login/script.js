@@ -20,8 +20,8 @@ async function registerUser(event) {
   if (result.status === "success") {
     alert("Successful Login!");
     localStorage.setItem("auth-token", result.userid);
-    window.location.href = "https://heyday.dev/chat";
+    window.location.href = "/chat";
   } else {
-    alert(JSON.stringify(result));
+    alert(JSON.stringify(result.error));
   }
 }

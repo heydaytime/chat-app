@@ -8,8 +8,16 @@ const user = new mongoose.Schema({
     maxlength: 12,
     minlength: 6,
   },
-  password: { type: String, required: true, maxlength: 16, minlength: 8 },
-
+  password: {
+    type: String,
+    required: true,
+    maxlength: 16,
+    minlength: 8,
+  },
+  created_on: {
+    type: Date,
+    default: Date.now(),
+  },
   is_online: {
     type: Boolean,
     default: false,
