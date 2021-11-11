@@ -46,6 +46,15 @@ io.on("connection", async (socket) => {
         username,
         usersOnline,
       });
+
+      const messages = await Chat.find().select("-__v").select("-_id");
+
+      const setupData = {
+        username,
+        messages,
+      };
+
+      socket.emit("setup-data", setupData);
     }
 
     // Making the users unavailable for another free login
@@ -56,15 +65,6 @@ io.on("connection", async (socket) => {
       { runValidators: true }
     );
   });
-
-  const messages = await Chat.find().select("-__v").select("-_id");
-
-  const setupData = {
-    username,
-    messages,
-  };
-
-  socket.emit("setup-data", setupData);
 
   socket.on("send-msg", (message) => {
     const time = new Date().toLocaleTimeString("en-IN", {
