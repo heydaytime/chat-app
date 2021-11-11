@@ -5,6 +5,9 @@ const app = require(`${__dirname}/app`);
 const Users = require(`${__dirname}/model/user`);
 const Chat = require(`${__dirname}/model/chat`);
 
+// Temp Variables
+let usersOnline = 0;
+
 // HTTPS SERVER
 const https = require("https");
 const fs = require("fs");
@@ -22,36 +25,46 @@ server.listen(443, () => {
 
 const io = require("socket.io")(server);
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   let authToken;
   let username;
 
-  console.log(socket.id, "has joined");
-  socket.on("auth-req", (data) => {
-    // Setting authToken
+  await socket.on("auth-req", async (data) => {
     authToken = data;
-    Users.findById(authToken).then((user) => {
-      if (user === null && !user.is_online) {
-        socket.emit("auth-res", false);
-        socket.disconnect();
-        return;
-      }
-      // Getting Chat
+    const user = await Users.findById(authToken);
 
-      Chat.find().then((messages) => {
-        const setupData = {
-          username: user.username,
-          messages,
-        };
-        socket.emit("setup-data", setupData);
-      });
-
-      // Setting username
-      username = user.username;
+    if (user === null || !user.is_online) {
+      socket.emit("auth-res", false);
+      socket.disconnect();
+    } else {
       socket.emit("auth-res", true);
-      io.emit("now-online", username);
-    });
+      username = user.username;
+
+      usersOnline++;
+
+      io.emit("now-online", {
+        username,
+        usersOnline,
+      });
+    }
+
+    // Making the users unavailable for another free login
+
+    await Users.findByIdAndUpdate(
+      authToken,
+      { is_online: false },
+      { runValidators: true }
+    );
   });
+
+  const messages = await Chat.find().select("-__v").select("-_id");
+
+  const setupData = {
+    username,
+    messages,
+  };
+
+  socket.emit("setup-data", setupData);
 
   socket.on("send-msg", (message) => {
     const time = new Date().toLocaleTimeString("en-IN", {
@@ -70,11 +83,16 @@ io.on("connection", (socket) => {
     Chat.create(messageObj).then();
   });
 
-  socket.on("disconnect", () => {
-    Users.findByIdAndUpdate(
-      authToken,
-      { is_online: false },
-      { runValidators: true }
-    ).then();
+  socket.on("disconnect", async () => {
+    // return if the user has an invalid auth token and don't update the users
+    if (!username) return;
+
+    // Setting the number of online users now
+    usersOnline--;
+
+    io.emit("now-offline", {
+      username,
+      usersOnline,
+    });
   });
 });

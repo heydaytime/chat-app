@@ -13,14 +13,29 @@
     <div class="bg bg3"></div>
     <div class="container">
       <div class="online-users">
-        <h1>Online Users</h1>
+        <header class="users-online-header">
+          <h1>Online Users</h1>
+          <div class="users-online-svg">
+            <img src="svg/users-svgrepo-com.svg" />
+            <p id="online-users-val"></p>
+          </div>
+        </header>
         <div id="online-users-window">
           <!-- TO BE POPULATED BY JAVASCRIPT -->
         </div>
+        <div class="group-window">
+          <input
+            type="text"
+            placeholder="Join Group"
+            autocomplete="off"
+            id="grp-field"
+          />
+        </div>
       </div>
-
       <div id="chat-area">
-        <header><h1 id="room-name">Chat-Room</h1></header>
+        <header>
+          <h1 id="room-name">Chat-Room</h1>
+        </header>
 
         <div class="message-window" id="msg-win">
           <!-- TO BE POPULATED BY JAVASCRIPT -->

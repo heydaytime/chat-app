@@ -50,13 +50,6 @@ body {
   }
 }
 
-h1 {
-  text-align: center;
-  padding-bottom: 10px;
-  font-family: monospace;
-  font-size: 50px;
-}
-
 .container {
   padding: auto;
   width: 100%;
@@ -71,11 +64,34 @@ h1 {
   border-radius: 10px;
 }
 
+.users-online-header h1 {
+  text-align: center;
+  font-family: monospace;
+  font-size: 50px;
+}
+
+.users-online-header {
+  display: inline-flex;
+  width: 100%;
+}
+
+.users-online-svg {
+  padding-left: 5px;
+  display: inline-flex;
+  align-items: top;
+  font-size: 25px;
+}
+.users-online-svg img {
+  min-width: 50px;
+  max-width: 50px;
+}
+
 #online-users-window {
   background: rgba(255, 252, 252, 0.85);
   border: black solid 5px;
   border-radius: 50px;
-  height: 90%;
+  min-height: 88%;
+  max-height: 88%;
   overflow-y: auto;
 }
 
@@ -89,11 +105,34 @@ h1 {
   font-size: 100%;
 }
 
+.group-window {
+  width: 100%;
+  height: 5%;
+  min-height: 50px;
+  padding-top: 10px;
+}
+#grp-field {
+  border: none;
+  background: #000;
+  border-radius: 10px;
+  min-width: 100%;
+  min-height: 100%;
+}
+hr {
+  border: solid 2px black;
+}
+
 /* CHATS AREA DOWN HERE  */
 #chat-area {
   padding: 10px;
   height: 100%;
   width: 75%;
+}
+
+#room-name {
+  text-align: center;
+  font-family: monospace;
+  font-size: 50px;
 }
 
 .message-window {
@@ -139,7 +178,7 @@ h1 {
 .form input {
   background: #000;
   border-radius: 10px;
-
+  border: none;
   color: aliceblue;
 }
 #msg-field {

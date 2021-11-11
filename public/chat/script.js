@@ -23,6 +23,17 @@ const createOnlineUser = (username) => {
   onlineUsersWindow.innerHTML += userJoinedBody;
 };
 
+const createOfflineUser = (username) => {
+  const onlineUsersWindow = document.getElementById("online-users-window");
+  const userJoinedBody = `<p class="users-joined">${username} Just Left!</p>`;
+  onlineUsersWindow.innerHTML += userJoinedBody;
+};
+
+const onlineUsers = (val) => {
+  const onlineUsers = document.getElementById("online-users-val");
+  onlineUsers.innerHTML = val;
+};
+
 const autoScroll = () => {
   const msgWindow = document.getElementById("msg-win");
   msgWindow.scrollTop = msgWindow.scrollHeight;
@@ -46,6 +57,8 @@ socket.on("setup-data", (data) => {
   username = data.username;
   const messages = data.messages;
 
+  console.log(messages);
+
   for (const iterator of messages) {
     const { username: sender, message, time } = iterator;
     createMsgBody(username === sender, sender, message, time);
@@ -55,7 +68,12 @@ socket.on("setup-data", (data) => {
 });
 
 socket.on("now-online", (data) => {
-  createOnlineUser(data);
+  createOnlineUser(data.username);
+  onlineUsers(data.usersOnline);
+});
+socket.on("now-offline", (data) => {
+  createOfflineUser(data.username);
+  onlineUsers(data.usersOnline);
 });
 
 socket.on("recieve-msg", (data) => {
