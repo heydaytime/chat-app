@@ -117,6 +117,7 @@ body {
   border-radius: 10px;
   min-width: 100%;
   min-height: 100%;
+  color: yellow;
 }
 hr {
   border: solid 2px black;
